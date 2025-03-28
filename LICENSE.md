@@ -1,0 +1,1 @@
+All rights reserved. This code is proprietary and may not be used, modified, or distributed without explicit permission.
