@@ -1,22 +1,25 @@
-from flask import Blueprint, current_app
+from flask import Blueprint, render_template, current_app
+from .tabela_price import calcular_tabela_price
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    # Use the app's configured static folder
-    return current_app.send_static_file('index.html')
+    # Pass the flag from app config to the template.
+    return render_template(
+        'index.html',
+        show_table=current_app.config.get('SHOW_TABLE', False),
+        config_interest=current_app.config.get('JUROS', 15.0)
+    )
 
 @main.route('/calcular', methods=['POST'])
 def calcular():
-    # Your calculation logic here...
     from flask import request, jsonify
-    from .tabela_price import calcular_tabela_price
-
     dados = request.get_json()
     try:
         principal = float(dados.get('principal', 0))
-        taxa_percentual = float(dados.get('juros', 0))
+        # Get the interest rate from configuration (in percent) and convert to decimal:
+        taxa_percentual = current_app.config.get('JUROS', 15.0)
         meses = int(dados.get('meses', 0))
         taxa_mensal = taxa_percentual / 100
         tabela = calcular_tabela_price(principal, taxa_mensal, meses)
