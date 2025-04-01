@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado da Extração de Holerite</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 600px; margin: auto; }
+    h1 { text-align: center; }
+    p { margin: 10px 0; }
+    pre { background-color: #f4f4f4; padding: 10px; }
+    a { display: inline-block; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Resultado da Extração</h1>
+  <p><strong>Empresa:</strong> {{ data.empresa or 'Não encontrado' }}</p>
+  <p><strong>CNPJ:</strong> {{ data.cnpj or 'Não encontrado' }}</p>
+  <p><strong>Código do Funcionário:</strong> {{ data.codigo or 'Não encontrado' }}</p>
+  <p><strong>Nome:</strong> {{ data.nome or 'Não encontrado' }}</p>
+  <p><strong>Cargo:</strong> {{ data.cargo or 'Não encontrado' }}</p>
+  <p><strong>Competência:</strong> {{ data.competencia or 'Não encontrada' }}</p>
+  <hr>
+  <p><strong>Total de Vencimentos:</strong> {{ data.total_vencimentos or 'Não encontrado' }}</p>
+  <p><strong>Total de Descontos:</strong> {{ data.total_descontos or 'Não encontrado' }}</p>
+  <p><strong>Valor Líquido:</strong> {{ data.valor_liquido or 'Não encontrado' }}</p>
+  <hr>
+  {% if data.bases_calculo %}
+    <h2>Bases de Cálculo</h2>
+    <p><strong>Salário Base:</strong> {{ data.bases_calculo.salario_base or '' }}</p>
+    <p><strong>Base INSS:</strong> {{ data.bases_calculo.base_inss or '' }}</p>
+    <p><strong>Base FGTS:</strong> {{ data.bases_calculo.base_fgts or '' }}</p>
+    <p><strong>FGTS do Mês:</strong> {{ data.bases_calculo.fgts_mes or '' }}</p>
+    <p><strong>Base IRRF:</strong> {{ data.bases_calculo.base_irrf or '' }}</p>
+    <p><strong>Faixa IRRF:</strong> {{ data.bases_calculo.faixa_irrf or '' }}</p>
+  {% endif %}
+  <hr>
+  {% if data.lancamentos %}
+    <h2>Lançamentos</h2>
+    {% for lanc in data.lancamentos %}
+      <p><strong>{{ lanc.codigo }}</strong> - {{ lanc.descricao }}: Vencimentos {{ lanc.vencimentos }}, Descontos {{ lanc.descontos }}</p>
+    {% endfor %}
+  {% endif %}
+  <h2>Texto Extraído (para depuração)</h2>
+  <pre>{{ data.raw_text }}</pre>
+  <a href="{{ url_for('main.index') }}">Voltar para a Simulação</a>
+</div>
+</body>
+</html>
